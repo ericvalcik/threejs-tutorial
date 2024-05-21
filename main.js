@@ -28,8 +28,10 @@ function onPointerMove(event) {
 	pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
   if (dragging) {
-    cube.rotateX(event.movementX / 50);
-    cube.rotateY(event.movementY / 50);
+    // TODO !!!
+    cube.rotateX(event.movementY / 50);
+    // cube.rotateY(event.movementX / 50);
+    cube.rotateZ(-event.movementX / 50);
   }
 }
 
@@ -53,7 +55,7 @@ const animate = () => {
 	const intersects = raycaster.intersectObjects( scene.children );
 
   pointerInCube = intersects.length > 0;
-  cube.material.color.set(pointerInCube ? 0x00ff00 : 0xff0000);
+  cube.material.color.set(pointerInCube || dragging ? 0x00ff00 : 0xff0000);
   document.getElementsByTagName('canvas')[0].style.cursor = pointerInCube ? 'pointer' : 'default';
 
   renderer.render(scene, camera);
