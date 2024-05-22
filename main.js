@@ -3,7 +3,6 @@ import * as THREE from 'three'
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-let canvas = undefined;
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -20,6 +19,7 @@ const pointer = new THREE.Vector2(1, 0);
 
 let pointerInCube = false;
 let dragging = false;
+let x, y, z;
 
 function onPointerMove(event) {
 	// calculate pointer position in normalized device coordinates
@@ -27,17 +27,22 @@ function onPointerMove(event) {
 	pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
 	pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
+  const { movementX: movX, movementY: movY } = event;
+
   if (dragging) {
     // TODO !!!
-    cube.rotateX(event.movementY / 50);
-    // cube.rotateY(event.movementX / 50);
-    cube.rotateZ(-event.movementX / 50);
+    cube.rotateX((Math.cos(y) * movY + Math.sin(z) * movX) / 50);
+    cube.rotateY((Math.cos(x) * movX + Math.sin(z) * movY) / 50);
+    cube.rotateZ((Math.cos(x) * movX + Math.cos(y) * movY) / 50);
   }
 }
 
-function mouseDown(event) {
+function mouseDown() {
   if (pointerInCube) {
     dragging = true;
+    x = cube.rotation.x;
+    y = cube.rotation.y;
+    z = cube.rotation.z;
   }
 }
 
